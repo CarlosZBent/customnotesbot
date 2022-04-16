@@ -154,3 +154,5 @@ LANGUAGES = [
 
 # User model
 AUTH_USER_MODEL = 'accounts.User'
+
+TELEGRAM_TOKEN = get_env_variable('TELEGRAM_TOKEN')
