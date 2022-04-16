@@ -1,0 +1,4 @@
+class NoteState:
+    ADD_TITLE = 'ADD_TITLE'
+    ADD_TEXT = 'ADD_TEXT'
+    ADD_DESCRIPTION = 'ADD_DESCRIPTION'

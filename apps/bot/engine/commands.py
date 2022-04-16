@@ -1,14 +1,15 @@
-from telegram import Update
-from telegram.ext import CallbackContext
+from telegram import Update, ReplyKeyboardRemove
+from telegram.ext import CallbackContext, ConversationHandler
 
-from apps.bot.models import UserBot
+from apps.bot.engine import markups
+from apps.bot.engine.states import NoteState
+from apps.bot.models import UserBot, Note
 
 
 def start(update: Update, context: CallbackContext):
     """
     Start command.
     """
-    update.message.reply_text('Hello!')
 
     # save the user
     user, created = UserBot.objects.get_or_create(
@@ -24,9 +25,47 @@ def start(update: Update, context: CallbackContext):
         user.language_code = update.message.from_user.language_code
         user.save()
 
+    text, keyboard = markups.main_markup(user)
+    update.message.reply_text(text, reply_markup=keyboard)
 
-def add_note(update: Update, context: CallbackContext):
+
+def cancel(update: Update, context: CallbackContext):
+    """
+    Cancel and end the conversation.
+    """
+    update.message.reply_text(
+        'Bye! I hope we can talk again some day.', reply_markup=ReplyKeyboardRemove()
+    )
+
+    return ConversationHandler.END
+
+
+def add_note_text(update: Update, context: CallbackContext):
     """
     Add notes command.
     """
     update.message.reply_text('Send me your note.')
+    # add the text
+    # Note.objects.create(
+    #     user=UserBot.objects.get(id=update.message.from_user.id),
+    #     title=update.message.text,
+    # )
+    return NoteState.ADD_TITLE
+
+
+def add_note_title(update: Update, context: CallbackContext):
+    """
+    Add title command.
+    """
+    update.message.reply_text('Send me your title.')
+    # add the title
+    return NoteState.ADD_DESCRIPTION
+
+
+def add_note_description(update: Update, context: CallbackContext):
+    """
+    Add text command.
+    """
+    update.message.reply_text('Send me your text.')
+    # add the description
+    return ConversationHandler.END
