@@ -33,6 +33,7 @@ class Note(TimeStampedModel):
     """
     user_bot = models.ForeignKey(UserBot, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
     text = models.TextField()
 
     def __str__(self):

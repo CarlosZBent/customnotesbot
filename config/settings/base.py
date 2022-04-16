@@ -34,13 +34,22 @@ def get_secret(setting, default=None, secret_file=secrets):
 
 
 # env-based secrets module
-def get_env_variable(var_name):
-    """Get the environment variable or return exception."""
+def get_env_variable(key: str, default: str = None) -> str:
+    """
+    Get the environment variable or return exception.
+    :param key: The environment variable key.
+    :param default: The default value.
+    :return: The environment variable value.
+    """
     try:
-        return os.environ[var_name]
+        value = os.environ[key]
     except KeyError:
-        error_msg = 'Set the {} environment variable'.format(var_name)
-        raise ImproperlyConfigured(error_msg)
+        if default is not None:
+            value = default
+        else:
+            error_msg = f'Set the {key} environment variable'
+            raise KeyError(error_msg)
+    return value
 
 
 # Application definition
@@ -156,4 +165,4 @@ LANGUAGES = [
 # User model
 AUTH_USER_MODEL = 'accounts.User'
 
-TELEGRAM_TOKEN = get_env_variable('TELEGRAM_TOKEN')
+TELEGRAM_TOKEN = get_env_variable('TELEGRAM_TOKEN', 'NOT_SET')
