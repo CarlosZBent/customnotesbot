@@ -5,7 +5,6 @@ from apps.bot.engine.bot import Bot
 class Command(BaseCommand):
     help = 'Run bot'
 
-
-def handle(self, *args, **options):
-    bot = Bot()
-    bot.start()
+    def handle(self, *args, **options):
+        bot = Bot()
+        bot.start()
