@@ -23,3 +23,10 @@ def start(update: Update, context: CallbackContext):
     if created:
         user.language_code = update.message.from_user.language_code
         user.save()
+
+
+def add_note(update: Update, context: CallbackContext):
+    """
+    Add notes command.
+    """
+    update.message.reply_text('Send me your note.')

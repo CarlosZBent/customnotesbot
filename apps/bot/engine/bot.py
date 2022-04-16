@@ -36,9 +36,16 @@ class Bot:
         Define the actions of your bot
         """
         start_handler = CommandHandler('start', commands.start)
+        add_note_handler = CommandHandler('add_note', commands.add_note)
         inline_handler = InlineQueryHandler(inlines.inline_query)
         self.dispatcher.add_handler(start_handler)
+        self.dispatcher.add_handler(add_note_handler)
         self.dispatcher.add_handler(inline_handler)
+
+        self.bot.set_my_commands([
+            ('start', 'Start the bot'),
+            ('add_note', 'Add a note to the bot'),
+        ])
 
     def start(self):
         """
