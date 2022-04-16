@@ -1,6 +1,6 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from apps.bot.models import UserBot
+from apps.bot.models import UserBot, Note
 
 
 def main_markup(user: UserBot) -> (str, list):
@@ -13,3 +13,24 @@ def main_markup(user: UserBot) -> (str, list):
         ],
     ]
     return text, InlineKeyboardMarkup(keyboard)
+
+
+def show_notes_markup(notes: Note) -> (str, list):
+    base_keyboard = [
+        [
+            InlineKeyboardButton(text="Add note", callback_data="add_note"),
+            InlineKeyboardButton(text="🔙 Back", callback_data="back_to_main"),
+        ],
+    ]
+    if notes:
+        text = f"Here are your notes:\n"
+        keyboard = [
+            [
+                InlineKeyboardButton(text=note.title, callback_data=f"show_note_{note.id}")
+            ] for note in notes
+        ]
+        return text, InlineKeyboardMarkup(keyboard + base_keyboard)
+
+    text = "You don't have any notes yet.\n"
+
+    return text, InlineKeyboardMarkup(base_keyboard)

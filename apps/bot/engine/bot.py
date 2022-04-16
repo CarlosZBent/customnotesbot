@@ -2,9 +2,10 @@ import logging
 
 import telegram
 from django.conf import settings
-from telegram.ext import Updater, CommandHandler, InlineQueryHandler, ConversationHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, InlineQueryHandler, ConversationHandler, MessageHandler, Filters, \
+    CallbackQueryHandler
 
-from apps.bot.engine import commands, inlines
+from apps.bot.engine import commands, inlines, callbacks
 from apps.bot.engine.states import NoteState
 
 
@@ -36,10 +37,10 @@ class Bot:
         """
         Define the actions of your bot
         """
-        start_handler = CommandHandler('start', commands.start)
-        inline_handler = InlineQueryHandler(inlines.inline_query)
-        self.dispatcher.add_handler(start_handler)
-        self.dispatcher.add_handler(inline_handler)
+        self.dispatcher.add_handler(CommandHandler('start', commands.start))
+        self.dispatcher.add_handler(CallbackQueryHandler(callbacks.show_notes, pattern='show_notes'))
+        self.dispatcher.add_handler(CallbackQueryHandler(callbacks.back_to_main, pattern='back_to_main'))
+        self.dispatcher.add_handler(InlineQueryHandler(inlines.inline_query))
 
         self.dispatcher.add_handler(ConversationHandler(
             entry_points=[CommandHandler('add_note', commands.add_note_text)],
