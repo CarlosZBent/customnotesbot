@@ -34,3 +34,16 @@ def show_notes_markup(notes: Note) -> (str, list):
     text = "You don't have any notes yet.\n"
 
     return text, InlineKeyboardMarkup(base_keyboard)
+
+
+def show_note_detail_markup(note: Note) -> (str, list):
+    # TODO: add edit and delete button
+    base_keyboard = [
+        [
+            InlineKeyboardButton(text="🔙 Back", callback_data="back_to_main"),
+        ],
+    ]
+    text = f"title: {note.title}\n" \
+           f"short description: {note.description}\n" \
+           f"text: {note.text}\n"
+    return text, InlineKeyboardMarkup(base_keyboard)

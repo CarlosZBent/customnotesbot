@@ -40,6 +40,7 @@ class Bot:
         self.dispatcher.add_handler(CommandHandler('start', commands.start))
         self.dispatcher.add_handler(CallbackQueryHandler(callbacks.show_notes, pattern='show_notes'))
         self.dispatcher.add_handler(CallbackQueryHandler(callbacks.back_to_main, pattern='back_to_main'))
+        self.dispatcher.add_handler(CallbackQueryHandler(callbacks.show_note_detail, pattern='show_note_'))
         self.dispatcher.add_handler(InlineQueryHandler(inlines.inline_query))
 
         self.dispatcher.add_handler(ConversationHandler(

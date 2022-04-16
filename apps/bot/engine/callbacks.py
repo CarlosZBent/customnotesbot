@@ -26,3 +26,14 @@ def show_notes(update: Update, context: CallbackContext):
     text, keyboard = markups.show_notes_markup(notes)
     update.callback_query.edit_message_text(text=text, reply_markup=keyboard)
     return ConversationHandler.END
+
+
+def show_note_detail(update: Update, context: CallbackContext):
+    """
+    Show note's details
+    """
+    note_id = int(update.callback_query.data.split('_')[-1])
+    note = Note.objects.get(id=note_id)
+    text, keyboard = markups.show_note_detail_markup(note)
+    update.callback_query.edit_message_text(text=text, reply_markup=keyboard)
+    return ConversationHandler.END
