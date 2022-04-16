@@ -44,12 +44,7 @@ def add_note_text(update: Update, context: CallbackContext):
     """
     Add notes command.
     """
-    update.message.reply_text('Send me your note.')
-    # add the text
-    # Note.objects.create(
-    #     user=UserBot.objects.get(id=update.message.from_user.id),
-    #     title=update.message.text,
-    # )
+    update.message.reply_text('Write title of your note:')
     return NoteState.ADD_TITLE
 
 
@@ -57,8 +52,9 @@ def add_note_title(update: Update, context: CallbackContext):
     """
     Add title command.
     """
-    update.message.reply_text('Send me your title.')
-    # add the title
+    title = update.message.text
+    context.user_data['title'] = title
+    update.message.reply_text('Send me a short description:')
     return NoteState.ADD_DESCRIPTION
 
 
@@ -66,6 +62,33 @@ def add_note_description(update: Update, context: CallbackContext):
     """
     Add text command.
     """
-    update.message.reply_text('Send me your text.')
-    # add the description
+    description = update.message.text
+    context.user_data['description'] = description
+    update.message.reply_text('Send the text you want to save:')
+    return NoteState.ADD_TEXT
+
+
+def add_note_text_end(update: Update, context: CallbackContext):
+    """
+    Add text end command.
+    """
+    text = update.message.text
+    title = context.user_data['title']
+    description = context.user_data['description']
+
+    del context.user_data['title']
+    del context.user_data['description']
+
+    user = UserBot.objects.get(id=update.message.from_user.id)
+    note = Note.objects.create(
+        user_bot=user,
+        title=title,
+        description=description,
+        text=text,
+    )
+    _, keyboard = markups.main_markup(user)
+    update.message.reply_text(
+        f'Note "{note.title}" was added successfully!',
+        reply_markup=keyboard
+    )
     return ConversationHandler.END

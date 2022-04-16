@@ -40,10 +40,19 @@ def show_note_detail_markup(note: Note) -> (str, list):
     # TODO: add edit and delete button
     base_keyboard = [
         [
-            InlineKeyboardButton(text="🔙 Back", callback_data="back_to_main"),
+            InlineKeyboardButton(text="🔙 Back", callback_data="show_notes"),
         ],
     ]
     text = f"title: {note.title}\n" \
            f"short description: {note.description}\n" \
            f"text: {note.text}\n"
     return text, InlineKeyboardMarkup(base_keyboard)
+
+
+def add_note_markup() -> (str, list):
+    keyboard = [
+        [
+            InlineKeyboardButton(text="🔙 Back", callback_data="back_to_main"),
+        ],
+    ]
+    return "Write title of your note:", InlineKeyboardMarkup(keyboard)

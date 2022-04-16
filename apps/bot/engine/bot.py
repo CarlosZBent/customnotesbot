@@ -44,10 +44,23 @@ class Bot:
         self.dispatcher.add_handler(InlineQueryHandler(inlines.inline_query))
 
         self.dispatcher.add_handler(ConversationHandler(
-            entry_points=[CommandHandler('add_note', commands.add_note_text)],
+            entry_points=[
+                CommandHandler('add_note', commands.add_note_text),
+                CallbackQueryHandler(callbacks.add_note, pattern='add_note')
+            ],
             states={
-                NoteState.ADD_TITLE: [MessageHandler(Filters.text, commands.add_note_title)],
-                NoteState.ADD_DESCRIPTION: [MessageHandler(Filters.text, commands.add_note_description)],
+                NoteState.ADD_TITLE: [
+                    MessageHandler(Filters.text, commands.add_note_title),
+                    CommandHandler('cancel', commands.cancel)
+                ],
+                NoteState.ADD_DESCRIPTION: [
+                    MessageHandler(Filters.text, commands.add_note_description),
+                    CommandHandler('cancel', commands.cancel)
+                ],
+                NoteState.ADD_TEXT: [
+                    MessageHandler(Filters.text, commands.add_note_text_end),
+                    CommandHandler('cancel', commands.cancel)
+                ],
             },
             fallbacks=[CommandHandler('cancel', commands.cancel)]
         ))
