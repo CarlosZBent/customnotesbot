@@ -7,6 +7,7 @@ class UserBot(TimeStampedModel):
     """
     UserBot model
     """
+    id = models.IntegerField(primary_key=True)
     chat_id = models.CharField(max_length=255, unique=True)
     username = models.CharField(max_length=255, blank=True, null=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
@@ -37,7 +38,7 @@ class Note(TimeStampedModel):
     text = models.TextField()
 
     def __str__(self):
-        return self.text
+        return self.description
 
     class Meta:
         verbose_name = "Note"

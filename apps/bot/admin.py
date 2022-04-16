@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Note, UserBot
 
-# Register your models here.
+admin.site.register(UserBot)
+admin.site.register(Note)
