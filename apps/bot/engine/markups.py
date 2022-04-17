@@ -40,6 +40,14 @@ def show_note_detail_markup(note: Note) -> (str, list):
     # TODO: add edit and delete button
     base_keyboard = [
         [
+            InlineKeyboardButton(text="Update Title", callback_data=f"update_title_{note.id}"),
+            InlineKeyboardButton(text="Update Text", callback_data=f"update_text_{note.id}"),
+            InlineKeyboardButton(text="Update description", callback_data=f"update_description_{note.id}"),
+        ],
+        [
+            InlineKeyboardButton(text="Delete", callback_data=f"delete_note_{note.id}"),
+        ],
+        [
             InlineKeyboardButton(text="🔙 Back", callback_data="show_notes"),
         ],
     ]
@@ -56,3 +64,25 @@ def add_note_markup() -> (str, list):
         ],
     ]
     return "Write title of your note:", InlineKeyboardMarkup(keyboard)
+
+
+def update_title_markup(note: Note) -> (str, list):
+    text = f"Write new title for note:\n"
+    keyboard = [
+        [
+            InlineKeyboardButton(text="Cancel", callback_data=f"show_note_{note.id}"),
+        ],
+    ]
+    return text, InlineKeyboardMarkup(keyboard)
+
+
+def update_text_markup(note: Note) -> (str, list):
+    pass
+
+
+def update_description_markup(note: Note) -> (str, list):
+    pass
+
+
+def delete_note_markup(note: Note) -> (str, list):
+    pass

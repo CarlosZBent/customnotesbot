@@ -65,6 +65,27 @@ class Bot:
             fallbacks=[CommandHandler('cancel', commands.cancel)]
         ))
 
+        self.dispatcher.add_handler(ConversationHandler(
+            entry_points=[
+                CallbackQueryHandler(callbacks.update_title, pattern='update_title_'),
+                CallbackQueryHandler(callbacks.update_text, pattern='update_text_'),
+                CallbackQueryHandler(callbacks.update_description, pattern='update_description_'),
+                CallbackQueryHandler(callbacks.delete_note, pattern='delete_note_')
+            ],
+            states={
+                NoteState.UPDATE_TITLE: [
+                    MessageHandler(Filters.text, commands.update_title)
+                ],
+                # NoteState.UPDATE_DESCRIPTION: [
+                #     MessageHandler(Filters.text, commands.update_description),
+                # ],
+                # NoteState.UPDATE_TEXT: [
+                #     MessageHandler(Filters.text, commands.update_text),
+                # ],
+            },
+            fallbacks=[MessageHandler(Filters.regex('cancel'), commands.cancel)]
+        ))
+
         self.bot.set_my_commands([
             ('start', 'Start the bot'),
             ('add_note', 'Add a note to the bot'),

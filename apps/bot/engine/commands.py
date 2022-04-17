@@ -1,9 +1,13 @@
+import logging
+
 from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import CallbackContext, ConversationHandler
 
 from apps.bot.engine import markups
 from apps.bot.engine.states import NoteState
 from apps.bot.models import UserBot, Note
+
+logger = logging.getLogger(__name__)
 
 
 def start(update: Update, context: CallbackContext):
@@ -27,6 +31,7 @@ def start(update: Update, context: CallbackContext):
 
     text, keyboard = markups.main_markup(user)
     update.message.reply_text(text, reply_markup=keyboard)
+    return ConversationHandler.END
 
 
 def cancel(update: Update, context: CallbackContext):
@@ -89,6 +94,23 @@ def add_note_text_end(update: Update, context: CallbackContext):
     _, keyboard = markups.main_markup(user)
     update.message.reply_text(
         f'Note "{note.title}" was added successfully!',
+        reply_markup=keyboard
+    )
+    return ConversationHandler.END
+
+
+def update_title(update: Update, context: CallbackContext):
+    """
+    Update note title
+    """
+    note = Note.objects.get(id=context.user_data['note_id'])
+    note.title = update.message.text
+    note.save()
+    text, keyboard = markups.show_note_detail_markup(note)
+
+    text = f'Note "{note.title}" was updated successfully!\n\n' + text
+    update.message.reply_text(
+        text=text,
         reply_markup=keyboard
     )
     return ConversationHandler.END
