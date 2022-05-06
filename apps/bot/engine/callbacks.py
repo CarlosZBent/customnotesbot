@@ -61,22 +61,25 @@ def update_title(update: Update, context: CallbackContext):
 def update_text(update: Update, context: CallbackContext):
     note_id = int(update.callback_query.data.split('_')[-1])
     note = Note.objects.get(id=note_id)
+    context.user_data['note_id'] = note_id
     text, keyboard = markups.update_text_markup(note)
     update.callback_query.edit_message_text(text=text, reply_markup=keyboard)
-    # return NoteState.UPDATE_TEXT
+    return NoteState.UPDATE_TEXT
 
 
 def update_description(update: Update, context: CallbackContext):
     note_id = int(update.callback_query.data.split('_')[-1])
     note = Note.objects.get(id=note_id)
+    context.user_data['note_id'] = note_id
     text, keyboard = markups.update_description_markup(note)
     update.callback_query.edit_message_text(text=text, reply_markup=keyboard)
-    # return NoteState.UPDATE_DESCRIPTION
+    return NoteState.UPDATE_DESCRIPTION
 
 
 def delete_note(update: Update, context: CallbackContext):
     note_id = int(update.callback_query.data.split('_')[-1])
     note = Note.objects.get(id=note_id)
+    context.user_data['note_id'] = note_id
     text, keyboard = markups.delete_note_markup(note)
     update.callback_query.edit_message_text(text=text, reply_markup=keyboard)
-    # return NoteState.DELETE_NOTE
+    return NoteState.DELETE_NOTE

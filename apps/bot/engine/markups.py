@@ -77,12 +77,34 @@ def update_title_markup(note: Note) -> (str, list):
 
 
 def update_text_markup(note: Note) -> (str, list):
-    pass
+    text = f"Write new text for note:\n"
+    keyboard = [
+        [
+            InlineKeyboardButton(text="Cancel", callback_data=f"show_note_{note.id}"),
+        ],
+    ]
+    return text, InlineKeyboardMarkup(keyboard)
 
 
 def update_description_markup(note: Note) -> (str, list):
-    pass
+    text = f"Write new description for note:\n"
+    keyboard = [
+        [
+            InlineKeyboardButton(text="Cancel", callback_data=f"show_note_{note.id}"),
+        ],
+    ]
+    return text, InlineKeyboardMarkup(keyboard)
 
 
 def delete_note_markup(note: Note) -> (str, list):
-    pass
+    text = f"Are you sure you want to delete note:\n" \
+           f"title: {note.title}\n" \
+           f"short description: {note.description}\n" \
+           f"text: {note.text}\n"
+    keyboard = [
+        [
+            InlineKeyboardButton(text="Yes", callback_data=f"delete_note_confirm_{note.id}"),
+            InlineKeyboardButton(text="No", callback_data=f"show_note_{note.id}"),
+        ],
+    ]
+    return text, InlineKeyboardMarkup(keyboard)

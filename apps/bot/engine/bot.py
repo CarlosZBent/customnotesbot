@@ -61,6 +61,10 @@ class Bot:
                     MessageHandler(Filters.text, commands.add_note_text_end),
                     CommandHandler('cancel', commands.cancel)
                 ],
+                NoteState.DELETE_NOTE: [
+                    MessageHandler(Filters.text, commands.delete_note),
+                    CommandHandler('cancel', commands.cancel)
+                ],
             },
             fallbacks=[CommandHandler('cancel', commands.cancel)]
         ))
@@ -76,12 +80,12 @@ class Bot:
                 NoteState.UPDATE_TITLE: [
                     MessageHandler(Filters.text, commands.update_title)
                 ],
-                # NoteState.UPDATE_DESCRIPTION: [
-                #     MessageHandler(Filters.text, commands.update_description),
-                # ],
-                # NoteState.UPDATE_TEXT: [
-                #     MessageHandler(Filters.text, commands.update_text),
-                # ],
+                NoteState.UPDATE_DESCRIPTION: [
+                    MessageHandler(Filters.text, commands.update_description),
+                ],
+                NoteState.UPDATE_TEXT: [
+                    MessageHandler(Filters.text, commands.update_text),
+                ],
             },
             fallbacks=[MessageHandler(Filters.regex('cancel'), commands.cancel)]
         ))

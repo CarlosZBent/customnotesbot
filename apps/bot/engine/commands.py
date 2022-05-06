@@ -114,3 +114,49 @@ def update_title(update: Update, context: CallbackContext):
         reply_markup=keyboard
     )
     return ConversationHandler.END
+
+
+def update_text(update: Update, context: CallbackContext):
+    """
+    Update note text
+    """
+    note = Note.objects.get(id=context.user_data['note_id'])
+    note.text = update.message.text
+    note.save()
+    text, keyboard = markups.show_note_detail_markup(note)
+
+    text = f'Note "{note.title}" was updated successfully!\n\n' + text
+    update.message.reply_text(
+        text=text,
+        reply_markup=keyboard
+    )
+    return ConversationHandler.END
+
+
+def update_description(update: Update, context: CallbackContext):
+    """
+    Update note description
+    """
+    note = Note.objects.get(id=context.user_data['note_id'])
+    note.description = update.message.text
+    note.save()
+    text, keyboard = markups.show_note_detail_markup(note)
+
+    text = f'Note "{note.title}" was updated successfully!\n\n' + text
+    update.message.reply_text(
+        text=text,
+        reply_markup=keyboard
+    )
+    return ConversationHandler.END
+
+
+def delete_note(update: Update, context: CallbackContext):
+    """
+    Delete note command.
+    """
+    note = Note.objects.get(id=context.user_data['note_id'])
+    note.delete()
+    update.message.reply_text(
+        'Note was deleted successfully!'
+    )
+    return ConversationHandler.END
